@@ -1,0 +1,43 @@
+---
+- name: Install Docker and Run Container
+  hosts: docker_hosts
+  become: true
+
+  tasks:
+    - name: Update all packages
+      yum:
+        name: "*"
+        state: latest
+
+    - name: Install Docker
+      yum:
+        name: docker
+        state: present
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Add ec2-user to docker group
+      user:
+        name: ec2-user
+        groups: docker
+        append: yes
+
+    - name: Pull nginx image
+      docker_image:
+        name: nginx
+        tag: latest
+        source: pull
+
+    - name: Run nginx container
+      docker_container:
+        name: nginx_web
+        image: nginx:latest
+        state: started
+        restart_policy: always
+        ports:
+          - "8081:80"
+

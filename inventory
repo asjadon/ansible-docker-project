@@ -1,0 +1,3 @@
+[docker_hosts]
+ec2 ansible_host=13.232.127.34 ansible_user=ec2-user ansible_ssh_private_key_file=~/ansible-key.pem
+
